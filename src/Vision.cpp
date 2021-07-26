@@ -19,10 +19,8 @@ using namespace std;
 
 Vision::Vision() {
 
-    // Load model
     _model = tflite::FlatBufferModel::BuildFromFile("detect.tflite");
 
-	// Get the names
 	bool result = getFileContent("COCO_labels.txt");
 	if(!result)
 	{
@@ -31,6 +29,7 @@ Vision::Vision() {
 	}
 
     _cap = cv::VideoCapture(0);
+    _cap.set(cv::CAP_PROP_BUFFERSIZE, 1);
     if (!_cap.isOpened()) {
         cout << "ERROR: Unable to open the camera" << endl;
     } else
@@ -41,7 +40,6 @@ Vision::Vision() {
 
 void Vision::detectionLoop() {
 
-    // Build the interpreter
     tflite::ops::builtin::BuiltinOpResolver resolver;
     tflite::InterpreterBuilder(*_model.get(), resolver)(&_interpreter);
 
@@ -59,28 +57,18 @@ void Vision::detectionLoop() {
         int cam_width =_frame.cols;
         int cam_height=_frame.rows;
 
-        // copy image to input as input tensor
         cv::resize(_frame, image, cv::Size(width,height));
         memcpy(_interpreter->typed_input_tensor<uchar>(0), image.data, image.total() * image.elemSize());
 
         _interpreter->SetAllowFp16PrecisionForFp32(true);
-        _interpreter->SetNumThreads(4); //quad core
+        _interpreter->SetNumThreads(4);
 
-        //    cout << "tensors size: " << _interpreter->tensors_size() << "\n";
-        //    cout << "nodes size: " << _interpreter->nodes_size() << "\n";
-        //    cout << "inputs: " << _interpreter->inputs().size() << "\n";
-        //    cout << "input(0) name: " << _interpreter->GetInputName(0) << "\n";
-        //    cout << "outputs: " << _interpreter->outputs().size() << "\n";
-
-        _interpreter->Invoke();      // run your model
+        _interpreter->Invoke();
 
         const float* detection_locations = _interpreter->tensor(_interpreter->outputs()[0])->data.f;
         const float* detection_classes= _interpreter->tensor(_interpreter->outputs()[1])->data.f;
         const float* detection_scores = _interpreter->tensor(_interpreter->outputs()[2])->data.f;
         const int num_detections = *_interpreter->tensor(_interpreter->outputs()[3])->data.f;
-
-        //there are ALWAYS 10 detections no matter how many objects are detectable
-        // cout << "number of detections: " << num_detections << "\n";
 
         const float confidence_threshold = 0.5;
         _detections.clear();
@@ -120,19 +108,14 @@ bool Vision::getDetections(std::vector<Detection*> &out) {
 }
 
 bool Vision::getFileContent(std::string fileName) {
-	// Open the File
 	std::ifstream in(fileName.c_str());
-	// Check if object is valid
 	if(!in.is_open()) return false;
 
 	std::string str;
-	// Read the next line from File untill it reaches the end.
 	while (std::getline(in, str))
 	{
-		// Line contains string of length > 0 then save it in vector
 		if(str.size()>0) _labels.push_back(str);
 	}
-	// Close The File
 	in.close();
 	return true;
 }
