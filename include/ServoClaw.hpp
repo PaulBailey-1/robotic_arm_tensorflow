@@ -1,3 +1,6 @@
+#ifndef SERVO_CLAW
+#define SERVO_CLAW
+
 #include "Servo.hpp"
 
 #define OPEN_ANGLE 180
@@ -11,3 +14,5 @@ class ServoClaw : Servo {
         void open();
         void close();
 };
+
+#endif

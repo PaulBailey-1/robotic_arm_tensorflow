@@ -21,3 +21,12 @@ RobotArm::RobotArm() {
 	claw = ServoClaw(3);
 
 }
+
+void RobotArm::servoControlLoop() {
+	while (!termination) {
+		base.updateMotion();
+		arm.updateMotion();
+		elbow.updateMotion();
+	}
+	std::cout << "Robot Arm terminatedn\n";
+}

@@ -4,6 +4,8 @@
 #include <opencv2/highgui.hpp>
 #include <fstream>
 #include <iostream>
+#include <vector>
+#include "Detection.hpp"
 #include <opencv2/core/ocl.hpp>
 #include "tensorflow/lite/interpreter.h"
 #include "tensorflow/lite/kernels/register.h"
@@ -11,20 +13,34 @@
 #include "tensorflow/lite/model.h"
 #include <cmath>
 
+
 class Vision {
     public:
         Vision();
 
         void detectionLoop();
-        cv::Mat getFrame();
+        std::vector<Detection*> getDetections(); 
 
-        bool newFrame = false;
-        bool termination =  false;
+        cv::Mat getFrame() {
+            return _frame;
+        }
+
+        bool termination = false;
 
     private:
         cv::VideoCapture _cap;
         cv::Mat _frame;
-        cv::Mat _processedFrame;
 
-        void detection();        
+        std::unique_ptr<tflite::FlatBufferModel> _model;
+        std::vector<std::string> _labels;
+        std::unique_ptr<tflite::Interpreter> _interpreter;
+
+        const size_t width = 300;
+        const size_t height = 300;
+
+        std::vector<Detection*> _detections;
+        bool _newDetections = false;
+
+        bool getFileContent(std::string fileName);
+
 };
