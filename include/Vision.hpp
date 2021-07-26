@@ -19,7 +19,7 @@ class Vision {
         Vision();
 
         void detectionLoop();
-        std::vector<Detection*> getDetections(); 
+        bool getDetections(std::vector<Detection*> &out); 
 
         cv::Mat getFrame() {
             return _frame;

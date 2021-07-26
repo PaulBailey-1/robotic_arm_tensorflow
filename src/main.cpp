@@ -16,8 +16,8 @@ int main() {
     std::thread robotArmThread(&RobotArm::servoControlLoop, robotArm);
 
     while(!output->terminated) {
-        std::vector<Detection*> detections = vision->getDetections();
-        if (!detections[0]->empty) {
+        std::vector<Detection*> detections;
+        if (vision->getDetections(detections)) {
             output->setDetections(detections);
         }
         output->frameUpdate(vision->getFrame());

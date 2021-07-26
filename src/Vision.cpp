@@ -109,15 +109,13 @@ void Vision::detectionLoop() {
     cout << "Vision terminate\n";
 }
 
-std::vector<Detection*> Vision::getDetections() {
+bool Vision::getDetections(std::vector<Detection*> &out) {
     if (_newDetections) {
         _newDetections = false;
-        return _detections;
+        out = _detections;
+        return true;
     } else {
-        std::vector<Detection*> empty;
-        empty.push_back(new Detection());
-        empty[0]->empty = true;
-        return empty;
+        return false;
     }
 }
 
