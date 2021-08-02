@@ -32,4 +32,8 @@ class Output {
         float _FPS[16];
 
         std::vector<Detection*> _detections;
+
+        int _img_count = 0;
+
+        void saveImage(cv::Mat frame);
 };
