@@ -15,7 +15,7 @@ DEPEXT      := d
 OBJEXT      := o
 
 #Flags, Libraries and Includes
-CFLAGS      := 
+CFLAGS      := -g
 LIB         := -L/tensorflow/tensorflow/lite/tools/make/gen/rpi_armv7l/lib -L/usr/local/lib \
 				-lwiringPi -lwiringPiDev -lpthread -lm -lwiringPiPca9685 -ltensorflow-lite -lrt -ldl -pthread -lflatbuffers\
 				`pkg-config --cflags --libs opencv4`

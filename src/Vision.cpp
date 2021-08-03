@@ -19,9 +19,9 @@ using namespace std;
 
 Vision::Vision() {
 
-    _model = tflite::FlatBufferModel::BuildFromFile("detect.tflite");
+    _model = tflite::FlatBufferModel::BuildFromFile("model.tflite");
 
-	bool result = getFileContent("COCO_labels.txt");
+	bool result = getFileContent("labels.txt");
 	if(!result)
 	{
         cout << "loading labels failed";
