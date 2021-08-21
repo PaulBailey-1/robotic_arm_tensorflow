@@ -28,5 +28,5 @@ void RobotArm::servoControlLoop() {
 		arm.updateMotion();
 		elbow.updateMotion();
 	}
-	std::cout << "Robot Arm terminatedn\n";
+	std::cout << "Robot Arm terminated\n";
 }
