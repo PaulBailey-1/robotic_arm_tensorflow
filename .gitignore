@@ -1,3 +1,4 @@
-/obj
-/bin
+/robot_control/obj
+/robot_control/bin
+/robot_control/.vscode
 /.vscode
