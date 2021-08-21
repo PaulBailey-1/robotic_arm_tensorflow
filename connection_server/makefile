@@ -2,7 +2,7 @@
 CC          := g++
 
 #The Target Binary Program
-TARGET      := robot
+TARGET      := server
 
 #The Directories, Source, Includes, Objects, Binary and Resources
 SRCDIR      := src
@@ -16,10 +16,10 @@ OBJEXT      := o
 
 #Flags, Libraries and Includes
 CFLAGS      := -g
-LIB         := -L/tensorflow/tensorflow/lite/tools/make/gen/rpi_armv7l/lib -L/usr/local/lib \
-				-lwiringPi -lwiringPiDev -lpthread -lm -lwiringPiPca9685 -ltensorflow-lite -lrt -ldl -pthread -lflatbuffers\
+LIB         := -L/usr/local/lib \
+				-lwiringPi -lwiringPiDev -lpthread -lm -lwiringPiPca9685 -lrt -ldl -pthread\
 				`pkg-config --cflags --libs opencv4`
-INC         := -I$(CURDIR)/$(INCDIR) -I/usr/local/include -I/usr/local/include/opencv4 -I /tensorflow
+INC         := -I$(CURDIR)/$(INCDIR) -I/usr/local/include -I/usr/local/include/opencv4 -I
 INCDEP      := -I$(INCDIR)
 
 #---------------------------------------------------------------------------------
