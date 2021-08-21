@@ -58,7 +58,7 @@ void Vision::detectionLoop() {
         int cam_height=_frame.rows;
 
         cv::resize(_frame, image, cv::Size(width,height));
-        memcpy(_interpreter->typed_input_tensor<uchar>(0), image.data, image.total() * image.elemSize());
+        memcpy(_interpreter->typed_input_tensor<float>(0), image.data, image.total() * image.elemSize());
 
         _interpreter->SetAllowFp16PrecisionForFp32(true);
         _interpreter->SetNumThreads(4);
@@ -74,7 +74,7 @@ void Vision::detectionLoop() {
         _detections.clear();
         for(int i = 0; i < num_detections; i++){
             if(detection_scores[i] > confidence_threshold){
-                int  det_index = (int)detection_classes[i]+1;
+                int det_index = (int)detection_classes[i]+1;
                 float y1=detection_locations[4*i  ]*cam_height;
                 float x1=detection_locations[4*i+1]*cam_width;
                 float y2=detection_locations[4*i+2]*cam_height;
