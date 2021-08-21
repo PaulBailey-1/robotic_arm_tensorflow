@@ -1,10 +1,9 @@
 #include <stdio.h>
+#include <fstream>
+#include <iostream>
 #include <opencv2/opencv.hpp>
 #include <opencv2/dnn.hpp>
 #include <opencv2/highgui.hpp>
-#include <fstream>
-#include <iostream>
-#include "Detection.hpp"
 #include <opencv2/core/ocl.hpp>
 #include "tensorflow/lite/interpreter.h"
 #include "tensorflow/lite/kernels/register.h"
@@ -12,6 +11,7 @@
 #include "tensorflow/lite/model.h"
 #include <cmath>
 
+#include "Detection.hpp"
 #include "Vision.hpp"
 
 
