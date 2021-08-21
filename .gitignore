@@ -1,4 +1,7 @@
 /robot_control/obj
 /robot_control/bin
 /robot_control/.vscode
+/connection_server/obj
+/connection_server/bin
+/connection_server/.vscode
 /.vscode

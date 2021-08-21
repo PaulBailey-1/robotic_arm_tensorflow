@@ -19,7 +19,7 @@ CFLAGS      := -g
 LIB         := -L/usr/local/lib \
 				-lwiringPi -lwiringPiDev -lpthread -lm -lwiringPiPca9685 -lrt -ldl -pthread\
 				`pkg-config --cflags --libs opencv4`
-INC         := -I$(CURDIR)/$(INCDIR) -I/usr/local/include -I/usr/local/include/opencv4 -I
+INC         := -I$(CURDIR)/$(INCDIR) -I/usr/local/include -I/usr/local/include/opencv4
 INCDEP      := -I$(INCDIR)
 
 #---------------------------------------------------------------------------------
