@@ -32,12 +32,14 @@ void Client::connectToRobot() {
 }
 
 void Client::recieve() {
+
     int readBytes = 0;
-    while (readBytes < FRAME_SIZE)
+    while (readBytes < frameSize)
     {
-        readBytes += read(_socket, _buffer + readBytes, FRAME_SIZE - readBytes);
+        readBytes += read(_socket, _buffer + readBytes, frameSize - readBytes);
     }
     printf("%i\n", readBytes);
-    cv::Mat img(480, 640, CV_8UC3, _buffer);
+    cv::Mat img(frameHeight, frameWidth, CV_8UC3, _buffer);
+
     cv::imwrite("got.jpg", img);
 }
