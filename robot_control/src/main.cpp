@@ -5,7 +5,7 @@
 #include "Client.hpp"
 #include "RobotArm.hpp"
 #include "Vision.hpp"
-#include "Output.hpp"
+#include "Display.hpp"
 #include "Detection.hpp"
 
 int main() {
@@ -13,7 +13,7 @@ int main() {
     Client* client = new Client();
     RobotArm* robotArm = new RobotArm();
     Vision* vision = new Vision(client);
-    Output* output = new Output(robotArm);
+    Display* display = new Display(robotArm);
 
     client->connectToRobot();
 
@@ -21,15 +21,15 @@ int main() {
     std::thread visionThread(&Vision::detectionLoop, vision);
     std::thread robotArmThread(&RobotArm::servoControlLoop, robotArm);
 
-    while(!output->terminated) {
+    while(!display->terminated) {
         std::vector<Detection*> detections;
         if (vision->getDetections(detections)) {
-            output->setDetections(detections);
+            display->setDetections(detections);
         }
-        output->frameUpdate(vision->getFrame());
+        display->frameUpdate(vision->getFrame());
     }
 
-    output->closeWindow();
+    display->closeWindow();
     client->kill();
     clientThread.join();
     vision->kill();
