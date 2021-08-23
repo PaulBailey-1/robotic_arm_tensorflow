@@ -8,12 +8,12 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/core/ocl.hpp>
 
-#include "RobotArm.hpp"
+#include "RobotControl.hpp"
 #include "Detection.hpp"
 
 class Display {
     public:
-        Display(RobotArm* robotArm);
+        Display(RobotControl* RobotControl);
         void frameUpdate(cv::Mat frame);
         void closeWindow();
 
@@ -24,7 +24,7 @@ class Display {
         bool terminated = false;
 
     private:
-        RobotArm* _robotArm;
+        RobotControl* _robotControl;
 
         float _frameRate;
         int _frameCount;

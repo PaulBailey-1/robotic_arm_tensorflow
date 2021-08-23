@@ -4,7 +4,7 @@
 
 #include "RobotArm.hpp"
 
-RobotArm::RobotArm() {
+RobotArm::RobotArm(Client* client) {
 
     // wiringPiSetup();
     // int fd = pca9685Setup(PIN_BASE, 0x40, HERTZ);

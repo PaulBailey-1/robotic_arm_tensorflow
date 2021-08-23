@@ -12,13 +12,13 @@
 #include <fstream>
 
 #include "Display.hpp"
-#include "RobotArm.hpp"
+#include "RobotControl.hpp"
 #include "Detection.hpp"
 
 #define KEYCOMMAND_MS 200
 
-Display::Display(RobotArm* robotArm) {
-    _robotArm = robotArm;
+Display::Display(RobotControl* robotControl) {
+    _robotControl = robotControl;
     _frameCount = 0;
     for(int i=0;i<16;i++) _FPS[i]=0.0;
 
@@ -54,28 +54,28 @@ void Display::frameUpdate(cv::Mat frame) {
             printf("Display terminated\n");
             break;
         case 82: // Up
-            _robotArm->elbow.move(CW, KEYCOMMAND_MS);
+            _robotControl->elbow.move(CW, KEYCOMMAND_MS);
             break;
         case 84: // Down
-            _robotArm->elbow.move(CC, KEYCOMMAND_MS);
+            _robotControl->elbow.move(CC, KEYCOMMAND_MS);
             break;
         case 81: // Left
-            _robotArm->base.move(CC, KEYCOMMAND_MS);
+            _robotControl->base.move(CC, KEYCOMMAND_MS);
             break;
         case 83: // Right
-            _robotArm->base.move(CW, KEYCOMMAND_MS);
+            _robotControl->base.move(CW, KEYCOMMAND_MS);
             break;
         case 225: // Out
-            _robotArm->arm.move(CC, KEYCOMMAND_MS);
+            _robotControl->arm.move(CC, KEYCOMMAND_MS);
             break;
         case 228: // In
-            _robotArm->arm.move(CW, KEYCOMMAND_MS);
+            _robotControl->arm.move(CW, KEYCOMMAND_MS);
             break;
         case 122: // Open
-            _robotArm->claw.open();
+            _robotControl->claw.open();
             break;
         case 120: // Close
-            _robotArm->claw.close();
+            _robotControl->claw.close();
             break;
         case 112: // Pic
             saveImage(frame);

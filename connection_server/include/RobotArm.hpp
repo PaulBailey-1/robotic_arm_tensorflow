@@ -6,7 +6,7 @@
 
 class RobotArm {
     public:
-        RobotArm();
+        RobotArm(Client* client);
         void servoControlLoop();
         void rotateBase(int speed);
 
