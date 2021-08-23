@@ -13,10 +13,11 @@
 #include "tensorflow/lite/model.h"
 #include <cmath>
 
+#include "Client.hpp"
 
 class Vision {
     public:
-        Vision();
+        Vision(Client* client);
 
         void detectionLoop();
         bool getDetections(std::vector<Detection*> &out); 
@@ -25,10 +26,14 @@ class Vision {
             return _frame;
         }
 
-        bool termination = false;
+        void kill() {
+            _termination = true;
+        }
+
 
     private:
-        cv::VideoCapture _cap;
+        Client* _client;
+
         cv::Mat _frame;
 
         std::unique_ptr<tflite::FlatBufferModel> _model;
@@ -40,6 +45,7 @@ class Vision {
 
         std::vector<Detection*> _detections;
         bool _newDetections = false;
+        bool _termination = false;
 
         bool getFileContent(std::string fileName);
 

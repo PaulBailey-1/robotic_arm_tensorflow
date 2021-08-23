@@ -1,6 +1,6 @@
 #include "pca9685.h"
 #include <wiringPi.h>
-#include <iostream>
+#include <stdio.h>
 
 #include "RobotArm.hpp"
 
@@ -23,10 +23,10 @@ RobotArm::RobotArm() {
 }
 
 void RobotArm::servoControlLoop() {
-	while (!termination) {
+	while (!_termination) {
 		base.updateMotion();
 		arm.updateMotion();
 		elbow.updateMotion();
 	}
-	std::cout << "Robot Arm terminated\n";
+	printf("Robotarm terminated\n");
 }

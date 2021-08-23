@@ -10,12 +10,17 @@ class RobotArm {
         void servoControlLoop();
         void rotateBase(int speed);
 
-        bool termination =  false;
+        void kill() {
+            _termination = true;
+        }
 
         ServoJoint base;
         ServoJoint arm;
         ServoJoint elbow;
         ServoClaw claw;
+
+    private:
+        bool _termination =  false;
 };
 
 #endif

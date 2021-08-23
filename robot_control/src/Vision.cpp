@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <fstream>
-#include <iostream>
 #include <opencv2/opencv.hpp>
 #include <opencv2/dnn.hpp>
 #include <opencv2/highgui.hpp>
@@ -13,27 +12,20 @@
 
 #include "Detection.hpp"
 #include "Vision.hpp"
+#include "Client.hpp"
 
+Vision::Vision(Client* client) {
 
-using namespace std;
-
-Vision::Vision() {
+    _client = client;
 
     _model = tflite::FlatBufferModel::BuildFromFile("model.tflite");
 
 	bool result = getFileContent("labels.txt");
 	if(!result)
 	{
-        cout << "loading labels failed";
+        printf("Loading labels failed\n");
         exit(-1);
 	}
-
-    _cap = cv::VideoCapture(0);
-    _cap.set(cv::CAP_PROP_BUFFERSIZE, 1);
-    if (!_cap.isOpened()) {
-        cout << "ERROR: Unable to open the camera" << endl;
-    } else
-        cout << "Camera Feed Opened" << endl;
 
     _frame = cv::imread("loading.jpg");
 }
@@ -45,11 +37,11 @@ void Vision::detectionLoop() {
 
     _interpreter->AllocateTensors();
 
-    while(!termination) {
+    while(!_termination) {
 
-        _cap >> _frame;
+        _frame = _client->getFrame();
         if (_frame.empty()) {
-            cerr << "No Camera Feed" << endl;
+            printf("No camer connection\n");
             return;
         }
 
@@ -93,8 +85,7 @@ void Vision::detectionLoop() {
         _newDetections = true;
     }
 
-    _cap.release();
-    cout << "Vision terminate\n";
+    printf("Vision terminate\n");
 }
 
 bool Vision::getDetections(std::vector<Detection*> &out) {

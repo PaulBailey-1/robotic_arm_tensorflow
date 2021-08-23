@@ -2,8 +2,8 @@
 #include <opencv2/dnn.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/core/ocl.hpp>
-#include <iostream>
 #include <string>
+#include <stdio.h>
 #include <bits/stdc++.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -43,15 +43,15 @@ void Output::frameUpdate(cv::Mat frame) {
 
     cv::imshow("Robot", frame);
 
-    char key = cv::pollKey();
+    int key = cv::pollKey();
     // if (key != 255) {
-    //     std::cout << (int)key << std::endl;
+    //     printf("Key - %i", (int)key);
     // }
 
     switch(key) {
         case 27:
             terminated = true;
-            std::cout << "Ouput terminated\n";
+            printf("Output terminated\n");
             break;
         case 82: // Up
             _robotArm->elbow.move(CW, KEYCOMMAND_MS);

@@ -8,9 +8,12 @@
 #include "Client.hpp"
 
 Client::Client() {
+
+    _latestFrame = cv::Mat();
+
     if ((_socket = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
-        printf("\n Socket creation error \n");
+        printf("Socket creation error\n");
     }
 
     _serv_addr.sin_family = AF_INET;
@@ -31,15 +34,18 @@ void Client::connectToRobot() {
     }
 }
 
-void Client::recieve() {
+void Client::recieveLoop() {
+    while (!_termination) {
 
-    int readBytes = 0;
-    while (readBytes < frameSize)
-    {
-        readBytes += read(_socket, _buffer + readBytes, frameSize - readBytes);
+        int readBytes = 0;
+        while (readBytes < frameSize)
+        {
+            readBytes += read(_socket, _buffer + readBytes, frameSize - readBytes);
+        }
+        _latestFrame = cv::Mat(frameHeight, frameWidth, CV_8UC3, _buffer);
     }
-    printf("%i\n", readBytes);
-    cv::Mat img(frameHeight, frameWidth, CV_8UC3, _buffer);
+}
 
-    cv::imwrite("got.jpg", img);
+void Client::sendCommand(int port, int angle) {
+
 }

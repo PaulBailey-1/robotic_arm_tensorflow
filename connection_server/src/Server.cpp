@@ -4,20 +4,20 @@
 #include <sys/socket.h>
 #include <stdlib.h>
 #include <netinet/in.h>
-#include <string.h>
+#include <string>
 
 #include "Server.hpp"
 
 Server::Server() {
     // Creating socket file descriptor
-    if ((_server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
+    if ((_server_socket = socket(AF_INET, SOCK_STREAM, 0)) == 0)
     {
         perror("socket failed");
         exit(EXIT_FAILURE);
     }
 
     // Forcefully attaching socket to the port 8080
-    if (setsockopt(_server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT,
+    if (setsockopt(_server_socket, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT,
                    &_opt, sizeof(_opt)))
     {
         perror("setsockopt");
@@ -28,13 +28,13 @@ Server::Server() {
     _address.sin_port = htons(PORT);
 
     // Forcefully attaching socket to the port 8080
-    if (bind(_server_fd, (struct sockaddr *)&_address,
+    if (bind(_server_socket, (struct sockaddr *)&_address,
              sizeof(_address)) < 0)
     {
         perror("bind failed");
         exit(EXIT_FAILURE);
     }
-    if (listen(_server_fd, 3) < 0)
+    if (listen(_server_socket, 3) < 0)
     {
         perror("listen");
         exit(EXIT_FAILURE);
@@ -44,18 +44,12 @@ Server::Server() {
 
 void Server::start() {
     printf("Server started\n");
-    if ((_client_socket = accept(_server_fd, (struct sockaddr *)&_address,
-                                (socklen_t *)&_addrlen)) < 0)
-    {
+    if ((_client_socket = accept(_server_socket, (struct sockaddr *)&_address, 
+    (socklen_t *)&_addrlen)) < 0) {
         perror("accept");
         exit(EXIT_FAILURE);
     }
     printf("Client connected\n");
-
-    // _valread = read(_client_socket, _buffer, 1024);
-    // printf("%s\n", _buffer);
-    // send(_client_socket, _hello, strlen(_hello), 0);
-    // printf("Hello message sent\n");
 }
 
 void Server::sendData(unsigned char* data, unsigned int size) {
@@ -64,4 +58,26 @@ void Server::sendData(unsigned char* data, unsigned int size) {
         bytesSent += send(_client_socket, data + bytesSent, size - bytesSent, 0);
     }
     printf("Sent %u bytes\n", bytesSent);
+}
+
+void Server::recieveCommands() {
+    while (!_disconnect)
+    {
+        int readBytes = 0;
+        while (_buffer[readBytes-1] == '-')
+        {
+            readBytes += read(_server_socket, _buffer + readBytes, BUFFER_SIZE - readBytes);
+        }
+        std::string message(_buffer);
+        std::string command = message.substr(0, message.length()-1);
+        printf("Command - %s", command);
+        if (command == "exit") {
+            _disconnect = true;
+        }
+    }
+}
+
+void Server::kill() {
+    close(_client_socket);
+    close(_server_socket);
 }
