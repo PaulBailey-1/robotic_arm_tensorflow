@@ -6,14 +6,14 @@
 
 RobotArm::RobotArm(Client* client) {
 
-    // wiringPiSetup();
-    // int fd = pca9685Setup(PIN_BASE, 0x40, HERTZ);
-	// if (fd < 0)
-	// {
-	// 	std::cout << "Error in pca9685 setup\n";
-	// }
+    wiringPiSetup();
+    int fd = pca9685Setup(PIN_BASE, 0x40, HERTZ);
+	if (fd < 0)
+	{
+		std::cout << "Error in pca9685 setup\n";
+	}
 
-    // pca9685PWMReset(fd);
+    pca9685PWMReset(fd);
 
 	base = ServoJoint(0);
 	arm = ServoJoint(1);
@@ -28,5 +28,8 @@ void RobotArm::servoControlLoop() {
 		arm.updateMotion();
 		elbow.updateMotion();
 	}
-	printf("Robotarm terminated\n");
+	base.rotate(0);
+	arm.rotate(0);
+	elbow.rotate(0);
+	printf("Robot arm terminated\n");
 }

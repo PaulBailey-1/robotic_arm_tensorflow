@@ -3,13 +3,16 @@
 
 #include "Server.hpp"
 #include "Camera.hpp"
+#include "RobotArm.hpp"
 
 int main()
 {
     Camera* camera = new Camera();
-    Server* server = new Server();
+    RobotArm* robotArm = new RobotArm();
+    Server* server = new Server(robotArm);
 
     std::thread serverRecieve(&Server::recieveCommands, server);
+    std::thread servoControl(&RobotArm::servoControlLoop, robotArm);
 
     server->start();
 
@@ -23,6 +26,8 @@ int main()
 
     server->kill();
     serverRecieve.join();
+    robotArm->kill();
+    servoControl.join();
 
     return 0;
 }

@@ -5,10 +5,13 @@
 #include <stdlib.h>
 #include <netinet/in.h>
 #include <string>
+#include <vector
 
 #include "Server.hpp"
 
-Server::Server() {
+Server::Server(RobotArm robotArm) {
+
+    _robotArm = robotArm;
     // Creating socket file descriptor
     if ((_server_socket = socket(AF_INET, SOCK_STREAM, 0)) == 0)
     {
@@ -71,10 +74,46 @@ void Server::recieveCommands() {
         std::string message(_buffer);
         std::string command = message.substr(0, message.length()-1);
         printf("Command - %s", command);
-        if (command == "exit") {
-            _disconnect = true;
+        parseCommand(command);
+    }
+}
+
+void Server::parseCommand(String command) {
+    std::vector<string> parts = split(command, ' ');
+    if (parts[0] == "close") {
+        _disconnect = true;
+    } else if (parts[0] == "base") {
+        if (parts[1] == "move") {
+            _robotArm->base.move(parts[2], parts[3]);
+        }
+    } else if (parts[0] == "arm") {
+        if (parts[1] == "move") {
+            _robotArm->arm.move(parts[2], parts[3]);
+        }
+    } else if (parts[0] == "elbow") {
+        if (parts[1] == "move") {
+            _robotArm->elbow.move(parts[2], parts[3]);
+        }
+    } else if (parts[0] == "claw") {
+        if (parts[1] == "open") {
+            _robotArm->claw.open();
+        } if (parts[1] == "close") {
+            _robotArm->claw.close();
         }
     }
+}
+
+std::vector<string> split(string s, string del) {
+    std::vector<string> parts;
+    int start = 0;
+    int end = s.find(del);
+    while (end != -1) {
+        parts.push_back(s.substr(start, end - start));
+        start = end + del.size();
+        end = s.find(del, start);
+    }
+    parts.push_back(s.substr(start, end - start));
+    return parts;
 }
 
 void Server::kill() {

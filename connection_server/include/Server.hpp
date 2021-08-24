@@ -5,7 +5,7 @@
 
 class Server {
     public:
-        Server();
+        Server(RobotArm robotArm);
         void start();
         void sendData(unsigned char* data, unsigned int size);
         void recieveCommands();
@@ -16,6 +16,7 @@ class Server {
         }
 
     private:
+        RobotArm* _robotArm;
         bool _disconnect = false;
 
         struct sockaddr_in _address;
@@ -26,4 +27,6 @@ class Server {
         int _addrlen = sizeof(_address);
 
         char _buffer[BUFFER_SIZE] = {0};
+
+        void parseCommand(String command);
 };
