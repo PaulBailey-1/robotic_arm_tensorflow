@@ -1,11 +1,12 @@
 #include <netinet/in.h>
+#include <string>
 
 #define PORT 7070
 #define BUFFER_SIZE 1024
 
 class Server {
     public:
-        Server(RobotArm robotArm);
+        Server(RobotArm* robotArm);
         void start();
         void sendData(unsigned char* data, unsigned int size);
         void recieveCommands();
@@ -21,12 +22,12 @@ class Server {
 
         struct sockaddr_in _address;
 
-        int _server_socket;
-        int _client_socket;
+        int _serverSocket;
+        int _clientSocket;
         int _opt = 1;
         int _addrlen = sizeof(_address);
 
         char _buffer[BUFFER_SIZE] = {0};
 
-        void parseCommand(String command);
+        void parseCommand(std::string command);
 };

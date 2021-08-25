@@ -28,7 +28,7 @@ class Client {
         static const int frameWidth = 300;
         static const int frameHeight = 225;
         static const int frameSize = frameWidth * frameHeight * 3;
-        int _socket = 0;
+        int _clientSocket = 0;
         struct sockaddr_in _serv_addr;
         char _buffer[frameSize] = {0};
 

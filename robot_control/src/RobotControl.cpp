@@ -2,12 +2,11 @@
 #include "RobotControl.hpp"
 
 RobotControl::RobotControl(Client* client) {
-    _client = client;
     
-    base = Joint(0);
-    arm = Joint(1);
-    elbow = Joint(2);
-    claw = Claw(3) ;
+    base = Joint(client);
+    arm = Joint(client);
+    elbow = Joint(client);
+    claw = Claw(client) ;
 }
 
 void RobotControl::controlLoop() {

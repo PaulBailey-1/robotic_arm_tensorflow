@@ -11,7 +11,7 @@ Client::Client() {
 
     _latestFrame = cv::Mat();
 
-    if ((_socket = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+    if ((_clientSocket = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
         printf("Socket creation error\n");
     }
@@ -28,7 +28,7 @@ void Client::connectToRobot() {
         printf("\nInvalid address/ Address not supported \n");
     }
 
-    if (connect(_socket, (struct sockaddr *)&_serv_addr, sizeof(_serv_addr)) < 0)
+    if (connect(_clientSocket, (struct sockaddr *)&_serv_addr, sizeof(_serv_addr)) < 0)
     {
         printf("\nConnection Failed \n");
     }
@@ -40,12 +40,14 @@ void Client::recieveLoop() {
         int readBytes = 0;
         while (readBytes < frameSize)
         {
-            readBytes += read(_socket, _buffer + readBytes, frameSize - readBytes);
+            readBytes += read(_clientSocket, _buffer + readBytes, frameSize - readBytes);
         }
         _latestFrame = cv::Mat(frameHeight, frameWidth, CV_8UC3, _buffer);
     }
 }
 
-void Client::sendCommand(int port, int angle) {
-
+void Client::sendCommand(std::string command) {
+    if (send(_clientSocket, command.c_str(), command.size(), 0) < 1) {
+        printf("Error, can't send command \"%s\"", command);
+    }
 }

@@ -18,5 +18,4 @@ class RobotControl {
 
     private:
         bool _termination = false;
-        Client* _client;
 };

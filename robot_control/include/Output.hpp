@@ -5,11 +5,10 @@
 
 class Output {
     public:
-        Output(int port);
+        Output(Client* client);
 
-    private:
-        int _port;
-        Client *client;
+    protected:
+        Client* _client;
 };
 
 enum Direction
@@ -21,14 +20,14 @@ enum Direction
 class Joint : public Output{
     public:
         Joint();
-        Joint(int port) : Output(port) {};
+        Joint(Client* client) : Output(client) {};
         void move(Direction dir, int time);
 };
 
 class Claw : public Output{
     public:
         Claw();
-        Claw(int port) : Output(port) {};
+        Claw(Client* client) : Output(client) {};
         void open();
         void close();
 };
