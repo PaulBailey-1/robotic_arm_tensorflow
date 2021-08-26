@@ -14,7 +14,10 @@ class Servo {
 
         void write(int angle);
 
-        static Client* client;
+        virtual void move(Direction direction, int time);
+        virtual void open();
+        virtual void close();
+
     private:
         int _port;
 };

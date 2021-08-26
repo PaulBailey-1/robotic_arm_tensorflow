@@ -15,10 +15,8 @@
 #include "RobotControl.hpp"
 #include "Detection.hpp"
 
-#define KEYCOMMAND_MS 200
-
-Display::Display(RobotControl* robotControl) {
-    _robotControl = robotControl;
+Display::Display(Client* client) {
+    _client = client;
     _frameCount = 0;
     for(int i=0;i<16;i++) _FPS[i]=0.0;
 
@@ -54,28 +52,28 @@ void Display::frameUpdate(cv::Mat frame) {
             printf("Display terminated\n");
             break;
         case 82: // Up
-            _robotControl->elbow.move(CW, KEYCOMMAND_MS);
+            _client->sendCommand("elbow move CW " + std::to_string(KEYCOMMAND_MS));
             break;
         case 84: // Down
-            _robotControl->elbow.move(CC, KEYCOMMAND_MS);
+            _client->sendCommand("elbow move CC " + std::to_string(KEYCOMMAND_MS));
             break;
         case 81: // Left
-            _robotControl->base.move(CC, KEYCOMMAND_MS);
+            _client->sendCommand("base move CC " + std::to_string(KEYCOMMAND_MS));
             break;
         case 83: // Right
-            _robotControl->base.move(CW, KEYCOMMAND_MS);
+            _client->sendCommand("base move CW " + std::to_string(KEYCOMMAND_MS));
             break;
         case 225: // Out
-            _robotControl->arm.move(CC, KEYCOMMAND_MS);
+            _client->sendCommand("arm move CC " + std::to_string(KEYCOMMAND_MS));
             break;
         case 228: // In
-            _robotControl->arm.move(CW, KEYCOMMAND_MS);
+            _client->sendCommand("arm move CW " + std::to_string(KEYCOMMAND_MS));
             break;
         case 122: // Open
-            _robotControl->claw.open();
+            _client->sendCommand("claw open");
             break;
         case 120: // Close
-            _robotControl->claw.close();
+            _client->sendCommand("claw close");
             break;
         case 112: // Pic
             saveImage(frame);

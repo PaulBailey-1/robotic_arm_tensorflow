@@ -11,7 +11,7 @@ class Client {
         Client();
         void connectToRobot();
         void recieveLoop();
-        void sendCommand(int port, int angle);
+        void sendCommand(std::string command);
 
         cv::Mat getFrame() {
             return _latestFrame;

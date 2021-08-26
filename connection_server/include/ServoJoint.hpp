@@ -7,7 +7,7 @@
 
 enum Direction { CW = 1, CC = -1};
 
-class ServoJoint : Servo {
+class ServoJoint : public Servo {
     public:
         ServoJoint(int port);
         ServoJoint();

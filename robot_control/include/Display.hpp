@@ -8,12 +8,14 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/core/ocl.hpp>
 
-#include "RobotControl.hpp"
 #include "Detection.hpp"
+#include "Client.hpp"
+
+#define KEYCOMMAND_MS 200
 
 class Display {
     public:
-        Display(RobotControl* RobotControl);
+        Display(Client* client);
         void frameUpdate(cv::Mat frame);
         void closeWindow();
 
@@ -24,7 +26,7 @@ class Display {
         bool terminated = false;
 
     private:
-        RobotControl* _robotControl;
+        Client* _client;
 
         float _frameRate;
         int _frameCount;

@@ -13,7 +13,7 @@ int main() {
     Client* client = new Client();
     RobotControl* robotControl = new RobotControl(client);
     Vision* vision = new Vision(client);
-    Display* display = new Display(robotControl);
+    Display* display = new Display(client);
 
     client->connectToRobot();
 
