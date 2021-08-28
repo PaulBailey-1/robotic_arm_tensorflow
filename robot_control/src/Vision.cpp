@@ -49,7 +49,7 @@ void Vision::detectionLoop() {
         int cam_height=_frame.rows;
 
         cv::resize(_frame, image, cv::Size(width,height));
-        memcpy(_interpreter->typed_input_tensor<float>(0), image.data, image.total() * image.elemSize());
+        memcpy(_interpreter->typed_input_tensor<uchar>(0), image.data, image.total() * image.elemSize());
 
         _interpreter->SetAllowFp16PrecisionForFp32(true);
         _interpreter->SetNumThreads(4);
@@ -73,8 +73,7 @@ void Vision::detectionLoop() {
 
                 int box[4] = {(int)x1, (int)y1, (int)(x2 - x1), (int)(y2 - y1)};
                 Detection* detection = new Detection();
-                for (int i = 0; i < 4; i++)
-                {
+                for (int i = 0; i < 4; i++) {
                     detection->box[i] = box[i];
                 }
                 detection->name = _labels[det_index];
