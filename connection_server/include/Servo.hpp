@@ -12,9 +12,9 @@ class Servo {
 
         void write(int angle);
 
-        virtual void move(Direction direction, int time);
-        virtual void open();
-        virtual void close();
+        virtual void move(int dir, int time) {};
+        virtual void open() {};
+        virtual void close() {};
 
     private:
         int _port;

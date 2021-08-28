@@ -5,8 +5,6 @@
 
 #include "Servo.hpp"
 
-enum Direction { CW = 1, CC = -1};
-
 class ServoJoint : public Servo {
     public:
         ServoJoint(int port);
@@ -14,7 +12,7 @@ class ServoJoint : public Servo {
 
         void rotate(float speed); // 1 to -1
         void updateMotion();
-        void move(Direction dir, int time);
+        void move(int dir, int time); // CW = 1, CC = -1
     
     private:
         int _motionTime = 0;

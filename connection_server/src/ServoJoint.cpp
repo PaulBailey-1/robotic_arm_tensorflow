@@ -8,7 +8,7 @@ void ServoJoint::rotate(float speed) {
     Servo::write(speed*90 + 90);
 }
 
-void ServoJoint::move(Direction dir, int time) {
+void ServoJoint::move(int dir, int time) {
     ServoJoint::rotate(dir);
     _motionBegin = std::chrono::steady_clock::now();
     _motionTime = time;

@@ -123,15 +123,10 @@ void Server::parseCommand(std::string command) {
     }
 
     if (parts[1] == "move") {
+        int direction = std::stoi(parts[2]);
         int time = std::stoi(parts[3]);
-        int direction;
-        if (parts[2] == "CW") {
-            direction = 1;
-        }
-        else if (parts[2] == "CC") {
-            direction = -1;
-        }
-        output->move((Direction)direction, time);
+
+        output->move(direction, time);
         return;
     }
     printf("Command not recognized - \"%s\"", command);
