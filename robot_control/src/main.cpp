@@ -1,6 +1,7 @@
 
 #include <thread>
 #include <vector>
+#include <signal.h>
 
 #include "Client.hpp"
 #include "RobotControl.hpp"
@@ -8,12 +9,20 @@
 #include "Display.hpp"
 #include "Detection.hpp"
 
+bool terminate = false;
+
+void interruptSignalHandler(int sigNum) {
+    terminate = true;
+}
+
 int main() {
 
     Client* client = new Client();
     RobotControl* robotControl = new RobotControl(client);
     Vision* vision = new Vision(client);
-    Display* display = new Display(robotControl);
+    Display* display = new Display(client);
+
+    signal(SIGINT, interruptSignalHandler);
 
     client->connectToRobot();
 
@@ -21,7 +30,7 @@ int main() {
     std::thread visionThread(&Vision::detectionLoop, vision);
     std::thread robotArmThread(&RobotControl::controlLoop, robotControl);
 
-    while(!display->terminated) {
+    while(!terminate && !display->terminated) {
         std::vector<Detection*> detections;
         if (vision->getDetections(detections)) {
             display->setDetections(detections);

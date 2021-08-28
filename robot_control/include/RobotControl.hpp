@@ -1,6 +1,5 @@
 
 #include "Client.hpp"
-#include "Output.hpp"
 
 class RobotControl {
     public:
@@ -11,11 +10,8 @@ class RobotControl {
             _termination = true;
         }
 
-        Joint base;
-        Joint arm;
-        Joint elbow;
-        Claw claw;
-
     private:
         bool _termination = false;
+
+        Client* _client;
 };

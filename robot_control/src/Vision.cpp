@@ -39,10 +39,9 @@ void Vision::detectionLoop() {
 
     while(!_termination) {
 
-        _frame = _client->getFrame();
+        _frame = _client->waitForFrame();
         if (_frame.empty()) {
-            printf("No camer connection\n");
-            return;
+            printf("No camera connection\n");
         }
 
         cv::Mat image;

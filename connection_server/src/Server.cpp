@@ -10,6 +10,7 @@
 
 #include "Server.hpp"
 #include "RobotArm.hpp"
+#include "Servo.hpp"
 
 Server::Server(RobotArm* robotArm) {
 
@@ -85,25 +86,55 @@ void Server::recieveCommands() {
 
 void Server::parseCommand(std::string command) {
     std::vector<std::string> parts = split(command, " ");
-    if (parts[0] == "base") {
-        if (parts[1] == "move") {
-            _robotArm->base.move((Direction) std::stoi(parts[2]), std::stoi(parts[3]));
-        }
-    } else if (parts[0] == "arm") {
-        if (parts[1] == "move") {
-            _robotArm->arm.move((Direction) std::stoi(parts[2]), std::stoi(parts[3]));
-        }
-    } else if (parts[0] == "elbow") {
-        if (parts[1] == "move") {
-            _robotArm->elbow.move((Direction) std::stoi(parts[2]), std::stoi(parts[3]));
-        }
-    } else if (parts[0] == "claw") {
-        if (parts[1] == "open") {
-            _robotArm->claw.open();
-        } if (parts[1] == "close") {
-            _robotArm->claw.close();
-        }
+    Servo* output = 0;
+
+    if (parts[0] == "close") {
+        _disconnect = true;
+        return;
     }
+
+    if (parts.size() < 2) {
+        printf("Command syntax error - \"%s\"", command);
+        return;
+    }
+
+    if (parts[0] == "base") {
+        output = &_robotArm->base;
+    } else if (parts[0] == "arm") {
+        output = &_robotArm->arm;
+    } else if (parts[0] == "elbow") {
+        output = &_robotArm->elbow;
+    } else if (parts[0] == "claw") {
+        output = &_robotArm->claw;
+    }
+
+    if (parts[1] == "open") {
+        output->open();
+        return;
+    } else if (parts[1] == "close") {
+        output->close();
+        return;
+    }
+
+    if (parts.size() < 4)
+    {
+        printf("Command syntax error - \"%s\"", command);
+        return;
+    }
+
+    if (parts[1] == "move") {
+        int time = std::stoi(parts[3]);
+        int direction;
+        if (parts[2] == "CW") {
+            direction = 1;
+        }
+        else if (parts[2] == "CC") {
+            direction = -1;
+        }
+        output->move((Direction)direction, time);
+        return;
+    }
+    printf("Command not recognized - \"%s\"", command);
 }
 
 std::vector<std::string> Server::split(std::string s, std::string del) {
