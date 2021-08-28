@@ -6,8 +6,9 @@ RobotControl::RobotControl(Client* client) {
 }
 
 void RobotControl::controlLoop() {
+    _client->sendCommand("claw close");
     while (!_termination) {
-
+        
     }
     
 }

@@ -42,40 +42,39 @@ void Display::frameUpdate(cv::Mat frame) {
     cv::imshow("Robot", frame);
 
     int key = cv::pollKey();
-    // if (key != 255) {
-    //     printf("Key - %i", (int)key);
+    // if (key != -1) {
+    //     printf("Key - %i\n", (int)key);
     // }
 
     switch(key) {
-        case 27:
+        case 1048603:
             terminated = true;
-            printf("Display terminated\n");
             break;
-        case 82: // Up
+        case 1113938:  // Up
             _client->sendCommand("elbow move CW " + std::to_string(KEYCOMMAND_MS));
             break;
-        case 84: // Down
+        case 1113940:  // Down
             _client->sendCommand("elbow move CC " + std::to_string(KEYCOMMAND_MS));
             break;
-        case 81: // Left
+        case 1113937:  // Left
             _client->sendCommand("base move CC " + std::to_string(KEYCOMMAND_MS));
             break;
-        case 83: // Right
+        case 1113939:  // Right
             _client->sendCommand("base move CW " + std::to_string(KEYCOMMAND_MS));
             break;
-        case 225: // Out
+        case 1114084:  // Out
             _client->sendCommand("arm move CC " + std::to_string(KEYCOMMAND_MS));
             break;
-        case 228: // In
+        case 1114082:  // In
             _client->sendCommand("arm move CW " + std::to_string(KEYCOMMAND_MS));
             break;
-        case 122: // Open
+        case 1048698:  // Open
             _client->sendCommand("claw open");
             break;
-        case 120: // Close
+        case 1048696:  // Close
             _client->sendCommand("claw close");
             break;
-        case 112: // Pic
+        case 1048688:  // Pic
             saveImage(frame);
             break;
         default:
@@ -85,6 +84,7 @@ void Display::frameUpdate(cv::Mat frame) {
 
 void Display::closeWindow() {
     cv::destroyAllWindows();
+    printf("Display terminated\n");
 }
 
 void Display::saveImage(cv::Mat frame) {

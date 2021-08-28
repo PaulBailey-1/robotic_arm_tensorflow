@@ -43,11 +43,23 @@ void Client::recieveLoop() {
             readBytes += read(_clientSocket, _buffer + readBytes, frameSize - readBytes);
         }
         _latestFrame = cv::Mat(frameHeight, frameWidth, CV_8UC3, _buffer);
+        _frameOld = false;
     }
 }
 
 void Client::sendCommand(std::string command) {
-    if (send(_clientSocket, command.c_str(), command.size(), 0) < 1) {
+    char* message = new char[command.size() + 1];
+    strcpy(message, command.c_str());
+    strcat(message, "/");
+    if (send(_clientSocket, message, command.size() + 1, 0) < 0) {
         printf("Error, can't send command \"%s\"", command);
+    } else {
+        printf("Sent command - %s\n", message);
     }
+}
+
+cv::Mat Client::waitForFrame() {
+    while (_frameOld) {}
+    _frameOld = true;
+    return _latestFrame;
 }

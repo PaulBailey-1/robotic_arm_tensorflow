@@ -13,16 +13,13 @@ class Client {
         void recieveLoop();
         void sendCommand(std::string command);
 
-        cv::Mat getFrame() {
-            return _latestFrame;
-        }
+        cv::Mat waitForFrame();
 
-        void kill() {
-            _termination = true;
-        }
+        void kill() { _termination = true; }
 
-    private:
+       private:
         bool _termination = false;
+        bool _frameOld = true;
 
         const char* serverIP = "192.168.1.67";
         static const int frameWidth = 300;
