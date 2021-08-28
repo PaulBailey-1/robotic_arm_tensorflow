@@ -15,6 +15,7 @@ Camera::Camera() {
 void Camera::getFrame(unsigned char* &data, unsigned int &size) {
     static cv::Mat frame;
     _cap >> frame;
+    cv::resize(frame, frame, cv::Size(300,225));
     data = frame.data;
     size = frame.total() * frame.elemSize();
 }

@@ -4,13 +4,13 @@
 
 #include "RobotArm.hpp"
 
-RobotArm::RobotArm(Client* client) {
+RobotArm::RobotArm() {
 
     wiringPiSetup();
     int fd = pca9685Setup(PIN_BASE, 0x40, HERTZ);
 	if (fd < 0)
 	{
-		std::cout << "Error in pca9685 setup\n";
+		printf("Error in pca9685 setup\n");
 	}
 
     pca9685PWMReset(fd);

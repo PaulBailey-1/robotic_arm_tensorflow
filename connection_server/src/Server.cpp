@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <netinet/in.h>
 #include <string>
+#include <cstring>
 #include <vector>
 
 #include "Server.hpp"
@@ -61,29 +62,30 @@ void Server::sendData(unsigned char* data, unsigned int size) {
     while (bytesSent < size) {
         bytesSent += send(_clientSocket, data + bytesSent, size - bytesSent, 0);
     }
-    printf("Sent %u bytes\n", bytesSent);
 }
 
 void Server::recieveCommands() {
-    while (!_disconnect)
-    {
+    while (!_disconnect) {
         int readBytes = 0;
-        while (_buffer[readBytes-1] == '-')
-        {
-            readBytes += read(_serverSocket, _buffer + readBytes, BUFFER_SIZE - readBytes);
+        while (_buffer[readBytes-1] != '/') {
+            readBytes += read(_clientSocket, _buffer + readBytes, BUFFER_SIZE - readBytes);
+            if (readBytes == -1) {
+                if (!_disconnect) {
+                    return;
+                }
+                printf("Server read error - \"%s\"", std::strerror(errno));
+            }
         }
+        printf("Command - %s\n", _buffer);
         std::string message(_buffer);
         std::string command = message.substr(0, message.length()-1);
-        printf("Command - %s", command);
         parseCommand(command);
     }
 }
 
 void Server::parseCommand(std::string command) {
     std::vector<std::string> parts = split(command, " ");
-    if (parts[0] == "close") {
-        _disconnect = true;
-    } else if (parts[0] == "base") {
+    if (parts[0] == "base") {
         if (parts[1] == "move") {
             _robotArm->base.move((Direction) std::stoi(parts[2]), std::stoi(parts[3]));
         }
@@ -104,7 +106,7 @@ void Server::parseCommand(std::string command) {
     }
 }
 
-std::vector<std::string> split(std::string s, std::string del) {
+std::vector<std::string> Server::split(std::string s, std::string del) {
     std::vector<std::string> parts;
     int start = 0;
     int end = s.find(del);
@@ -118,6 +120,7 @@ std::vector<std::string> split(std::string s, std::string del) {
 }
 
 void Server::kill() {
+    _disconnect = true;
     close(_clientSocket);
     close(_serverSocket);
 }

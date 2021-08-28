@@ -1,5 +1,8 @@
 #include <netinet/in.h>
 #include <string>
+#include <vector>
+
+#include "RobotArm.hpp"
 
 #define PORT 7070
 #define BUFFER_SIZE 1024
@@ -30,4 +33,5 @@ class Server {
         char _buffer[BUFFER_SIZE] = {0};
 
         void parseCommand(std::string command);
+        std::vector<std::string> split(std::string s, std::string del);
 };
