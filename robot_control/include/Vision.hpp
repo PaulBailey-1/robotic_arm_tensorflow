@@ -40,8 +40,11 @@ class Vision {
         std::vector<std::string> _labels;
         std::unique_ptr<tflite::Interpreter> _interpreter;
 
-        const size_t width = 192;
-        const size_t height = 192;
+        const size_t tensorsWidth = 192;
+        const size_t tensorsHeight = 192;
+
+        int _cam_width;
+        int _cam_height;
 
         std::vector<Detection*> _detections;
         bool _newDetections = false;

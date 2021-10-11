@@ -33,6 +33,7 @@ int main() {
     while(!terminate && !display->terminated) {
         std::vector<Detection*> detections;
         if (vision->getDetections(detections)) {
+            robotControl->setDetections(detections);
             display->setDetections(detections);
         }
         display->frameUpdate(vision->getFrame());

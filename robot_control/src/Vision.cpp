@@ -45,10 +45,10 @@ void Vision::detectionLoop() {
         }
 
         cv::Mat image;
-        int cam_width =_frame.cols;
-        int cam_height=_frame.rows;
+        _cam_width =_frame.cols;
+        _cam_height=_frame.rows;
 
-        cv::resize(_frame, image, cv::Size(width,height));
+        cv::resize(_frame, image, cv::Size(tensorsWidth, tensorsHeight));
         memcpy(_interpreter->typed_input_tensor<uchar>(0), image.data, image.total() * image.elemSize());
 
         _interpreter->SetAllowFp16PrecisionForFp32(true);
@@ -62,21 +62,22 @@ void Vision::detectionLoop() {
         const int num_detections = *_interpreter->tensor(_interpreter->outputs()[3])->data.f;
 
         const float confidence_threshold = 0.5;
+
+        for (int i = 0; i < _detections.size(); i++) {
+            delete _detections[i];
+        }
         _detections.clear();
+
         for(int i = 0; i < num_detections; i++){
             if(detection_scores[i] > confidence_threshold){
                 int det_index = (int)detection_classes[i]+1;
-                float y1=detection_locations[4*i  ]*cam_height;
-                float x1=detection_locations[4*i+1]*cam_width;
-                float y2=detection_locations[4*i+2]*cam_height;
-                float x2=detection_locations[4*i+3]*cam_width;
+                float y1=detection_locations[4*i  ]*_cam_height;
+                float x1=detection_locations[4*i+1]*_cam_width;
+                float y2=detection_locations[4*i+2]*_cam_height;
+                float x2=detection_locations[4*i+3]*_cam_width;
 
                 int box[4] = {(int)x1, (int)y1, (int)(x2 - x1), (int)(y2 - y1)};
-                Detection* detection = new Detection();
-                for (int i = 0; i < 4; i++) {
-                    detection->box[i] = box[i];
-                }
-                detection->name = _labels[det_index];
+                Detection* detection = new Detection(_labels[det_index] , box, _cam_width, _cam_height);
                 _detections.push_back(detection);
             }
         }
@@ -90,6 +91,10 @@ bool Vision::getDetections(std::vector<Detection*> &out) {
     if (_newDetections) {
         _newDetections = false;
         out = _detections;
+        for (int ii = 0; ii < _detections.size(); ii++) {
+            Detection* newDetection = new Detection(*_detections[ii]);
+            out.push_back(newDetection);
+        }
         return true;
     } else {
         return false;
