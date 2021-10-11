@@ -12,7 +12,7 @@ class ServoJoint : public Servo {
 
         void rotate(float speed); // 1 to -1
         void updateMotion();
-        void move(int dir, double time); // CW = 1, CC = -1
+        void move(float dir, double time); // CW = 1, CC = -1
     
     private:
         double _motionTime = 0;

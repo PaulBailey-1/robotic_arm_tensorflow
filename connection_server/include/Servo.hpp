@@ -12,7 +12,7 @@ class Servo {
 
         void write(int angle);
 
-        virtual void move(int dir, int time) {};
+        virtual void move(float dir, double time) {};
         virtual void open() {};
         virtual void close() {};
 
