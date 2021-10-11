@@ -10,18 +10,19 @@ void RobotControl::controlLoop() {
         if (_targetPresent) {
             printf("Target detection aquired-\n%s\n", _target.toString().c_str());
             _alignmentError = _target.scaleWidth / 2 - _target.centerX;
-            double movement = std::round(_alignmentError) * 0.001;
+            double movement = std::round(_alignmentError) * 0.008;
             if (std::abs(movement) > 0.1) {
                 std::string direction;
                 if (std::round(movement) == std::abs(std::round(movement))) {
-                    direction = "-1";
+                    direction = "-0.7";
                 } else {
                     direction = "1";
                 }
+                movement = std::abs(movement);
                 printf("Target x: %i Error: %f Moving for %fs in direction %s\n", _target.centerX, _alignmentError, movement, direction.c_str());
                 _client->sendCommand("base move " + direction + " " + std::to_string(movement));
             }
         }
-        sleep(5);
+        sleep(2);
     }
 }
