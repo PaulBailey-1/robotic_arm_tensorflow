@@ -12,10 +12,10 @@ class ServoJoint : public Servo {
 
         void rotate(float speed); // 1 to -1
         void updateMotion();
-        void move(int dir, int time); // CW = 1, CC = -1
+        void move(int dir, double time); // CW = 1, CC = -1
     
     private:
-        int _motionTime = 0;
+        double _motionTime = 0;
         std::chrono::steady_clock::time_point _motionBegin;
 };
 

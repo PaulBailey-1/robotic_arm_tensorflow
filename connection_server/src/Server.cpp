@@ -124,7 +124,7 @@ void Server::parseCommand(std::string command) {
 
     if (parts[1] == "move") {
         int direction = std::stoi(parts[2]);
-        int time = std::stoi(parts[3]);
+        double time = std::stod(parts[3]);
 
         output->move(direction, time);
         return;
