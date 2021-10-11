@@ -94,7 +94,7 @@ void Server::parseCommand(std::string command) {
     }
 
     if (parts.size() < 2) {
-        printf("Command syntax error - \"%s\"", command);
+        printf("Command syntax error - \"%s\"", command.c_str());
         return;
     }
 
@@ -123,9 +123,9 @@ void Server::parseCommand(std::string command) {
     }
 
     if (parts[1] == "move") {
-        int direction = std::stoi(parts[2]);
+        float direction = std::stof(parts[2]);
         double time = std::stod(parts[3]);
-
+        
         output->move(direction, time);
         return;
     }
