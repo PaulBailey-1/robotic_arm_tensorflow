@@ -9,7 +9,7 @@ class RobotControl {
         RobotControl(Client* client);
         void controlLoop();
 
-        void setDetections(std::vector<Detection*> detections) {
+        void setDetections(std::vector<Detection> detections) {
             if (detections.size() > 0) {
                 _target = detections[0];
                 _targetPresent = true;
@@ -25,7 +25,7 @@ class RobotControl {
     private:
         bool _termination = false;
 
-        Detection* _target;
+        Detection _target;
         bool _targetPresent = false;
 
         Client* _client;

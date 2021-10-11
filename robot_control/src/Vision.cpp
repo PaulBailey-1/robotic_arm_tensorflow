@@ -63,9 +63,6 @@ void Vision::detectionLoop() {
 
         const float confidence_threshold = 0.5;
 
-        for (int i = 0; i < _detections.size(); i++) {
-            delete _detections[i];
-        }
         _detections.clear();
 
         for(int i = 0; i < num_detections; i++){
@@ -77,8 +74,7 @@ void Vision::detectionLoop() {
                 float x2=detection_locations[4*i+3]*_cam_width;
 
                 int box[4] = {(int)x1, (int)y1, (int)(x2 - x1), (int)(y2 - y1)};
-                Detection* detection = new Detection(_labels[det_index] , box, _cam_width, _cam_height);
-                _detections.push_back(detection);
+                _detections.push_back(Detection(_labels[det_index], box, detection_scores[i], _cam_width, _cam_height));
             }
         }
         _newDetections = true;
@@ -87,14 +83,10 @@ void Vision::detectionLoop() {
     printf("Vision terminate\n");
 }
 
-bool Vision::getDetections(std::vector<Detection*> &out) {
+bool Vision::getDetections(std::vector<Detection> &out) {
     if (_newDetections) {
         _newDetections = false;
         out = _detections;
-        for (int ii = 0; ii < _detections.size(); ii++) {
-            Detection* newDetection = new Detection(*_detections[ii]);
-            out.push_back(newDetection);
-        }
         return true;
     } else {
         return false;

@@ -20,7 +20,7 @@ class Vision {
         Vision(Client* client);
 
         void detectionLoop();
-        bool getDetections(std::vector<Detection*> &out); 
+        bool getDetections(std::vector<Detection> &out); 
 
         cv::Mat getFrame() {
             return _frame;
@@ -46,7 +46,7 @@ class Vision {
         int _cam_width;
         int _cam_height;
 
-        std::vector<Detection*> _detections;
+        std::vector<Detection> _detections;
         bool _newDetections = false;
         bool _termination = false;
 

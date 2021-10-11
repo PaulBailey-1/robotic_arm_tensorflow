@@ -31,7 +31,7 @@ int main() {
     std::thread robotArmThread(&RobotControl::controlLoop, robotControl);
 
     while(!terminate && !display->terminated) {
-        std::vector<Detection*> detections;
+        std::vector<Detection> detections;
         if (vision->getDetections(detections)) {
             robotControl->setDetections(detections);
             display->setDetections(detections);

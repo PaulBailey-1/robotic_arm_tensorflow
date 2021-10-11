@@ -19,7 +19,7 @@ class Display {
         void frameUpdate(cv::Mat frame);
         void closeWindow();
 
-        void setDetections(std::vector<Detection*> detections) {
+        void setDetections(std::vector<Detection> detections) {
             _detections = detections;
         }
 
@@ -33,7 +33,7 @@ class Display {
         std::chrono::steady_clock::time_point _Tbegin, _Tend;
         float _FPS[16];
 
-        std::vector<Detection*> _detections;
+        std::vector<Detection> _detections;
 
         int _img_count = 0;
 

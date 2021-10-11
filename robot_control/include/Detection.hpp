@@ -5,9 +5,11 @@
 
 class Detection {
     public:
-        Detection(std::string objectName, int dims[4], int frameWidth, int frameHeight); // x,y,w,h
+        Detection() {};
+        Detection(std::string objectName, int dims[4], double conf, int frameWidth, int frameHeight); // x,y,w,h
         
-        double x, y, width, height, centerX, centerY;
+        int x, y, width, height;
+        double centerX, centerY, score;
         std::string name;
         int scaleWidth, scaleHeight;
 
